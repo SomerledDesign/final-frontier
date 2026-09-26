@@ -5,6 +5,9 @@ export SDL_VIDEODRIVER=x11
 export LIBGL_ALWAYS_SOFTWARE=1
 export SDL_VIDEO_X11_MOUSEWARP=0
 export SDL_VIDEO_X11_DGAMOUSE=0
+# Remove stale X lock/socket left by a previous run (else `docker start` fails
+# with "SDL No available video device" because Xvfb refuses to start).
+rm -f /tmp/.X99-lock /tmp/.X11-unix/X99
 Xvfb :99 -screen 0 1680x1050x24 -ac +extension XTEST >/tmp/xvfb.log 2>&1 &
 sleep 2
 x11vnc -storepasswd frontier /tmp/vnc.pass >/dev/null
