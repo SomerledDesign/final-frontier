@@ -2,3 +2,9 @@
 *.s.bin
 *.s.c
 frontier
+
+# Docker runtime build context: staged copies of build outputs and assets
+.docker-build/runtime-ctx/frontier
+.docker-build/runtime-ctx/fe2.s.bin
+.docker-build/runtime-ctx/sfx/
+.docker-build/runtime-ctx/music/
