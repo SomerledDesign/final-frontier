@@ -1,4 +1,4 @@
-export CFLAGS = -O2 -g -Wall -DOGG_MUSIC
+export CFLAGS = -O2 -g -Wall -DOGG_MUSIC -fsigned-char -fcommon
 export LIBS = -lGL -lGLU -lvorbisfile -lvorbis -logg
 export FE2OBJS = ../fe2.part1.o ../fe2.part2.o
 
@@ -25,10 +25,10 @@ fe2:
 fe2obj:
 	as68k/as68k --output-c fe2.s
 	# this bit can be optimised because it is lots of small functions
-	$(CC) -DPART1 -O1 -fomit-frame-pointer -Wall -Wno-unused -s `sdl-config --cflags` -c fe2.s.c -o fe2.part1.o
+	$(CC) -DPART1 -O1 -fomit-frame-pointer -Wall -Wno-unused -fcommon -s `sdl-config --cflags` -c fe2.s.c -o fe2.part1.o
 	# this can't unless you have shitloads of memory and a meaty
 	# machine, because it is a huge stinking function.
-	$(CC) -DPART2 -O0 -fomit-frame-pointer -Wall -Wno-unused -s `sdl-config --cflags` -c fe2.s.c -o fe2.part2.o
+	$(CC) -DPART2 -O0 -fomit-frame-pointer -Wall -Wno-unused -fcommon -s `sdl-config --cflags` -c fe2.s.c -o fe2.part2.o
 
 clean:
 	$(MAKE) -C src/ clean
