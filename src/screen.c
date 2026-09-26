@@ -150,6 +150,8 @@ void Screen_Init(void)
 	SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_ENABLE);
 	SDL_EventState(SDL_MOUSEBUTTONUP, SDL_ENABLE);
 	SDL_ShowCursor(SDL_ENABLE);
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
+	bGrabMouse = FALSE;
 }
 
 void Screen_UnInit(void)

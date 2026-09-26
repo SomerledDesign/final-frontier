@@ -26,11 +26,11 @@ void Call_GetMouseInput ()
 	mouse_mov = (short*)(STRam + STMemory_ReadLong (params+SIZE_WORD));
 	mouse_abs = (short*)(STRam + STMemory_ReadLong (params+SIZE_WORD+SIZE_LONG));
 
-	/* lazy lazy lazy lazy */
-	if ((abs (input.motion_x) > 100) || (abs (input.motion_y) > 100)) {
-			//printf ("That fucking input bug! %d,%d\n", input.motion_x, input.motion_y);
-			input.motion_x = input.motion_y = 0;
-	}
+	/* VNC delivers large absolute jumps; clamp instead of dropping. */
+	if (input.motion_x > 80) input.motion_x = 80;
+	if (input.motion_x < -80) input.motion_x = -80;
+	if (input.motion_y > 80) input.motion_y = 80;
+	if (input.motion_y < -80) input.motion_y = -80;
 	
 	mouse_mov[0] = SDL_SwapBE16 (SDL_SwapBE16 (mouse_mov[0]) + input.motion_x);
 	mouse_mov[1] = SDL_SwapBE16 (SDL_SwapBE16 (mouse_mov[1]) + input.motion_y);
@@ -81,12 +81,8 @@ void Input_PressSTKey (unsigned char ScanCode, BOOL bPress)
 
 static void do_mouse_grab ()
 {
-	/* grab mouse on right-button hold for correct controls */
-	if (input.cur_mousebut_state & 0x1) {
-		SDL_WM_GrabInput (SDL_GRAB_ON);
-	} else {
-		SDL_WM_GrabInput (SDL_GRAB_OFF);
-	}
+	/* Never grab under VNC: grab desyncs the visible cursor from clicks. */
+	SDL_WM_GrabInput (SDL_GRAB_OFF);
 }
 
 void Input_MousePress (int button)

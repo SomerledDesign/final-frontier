@@ -628,12 +628,13 @@ void Keymap_KeyDown(SDL_keysym *sdlkey)
   bPreviousKeyState = input.key_states[symkey];
   input.key_states[symkey] = TRUE;
 
-  /* If pressed short-cut key, retain keypress until safe to execute (start of VBL) */
-  if((modkey&KMOD_MODE) || (modkey&KMOD_RMETA) || (modkey&KMOD_CTRL))
+  /* Ctrl-E / Ctrl-Q etc. Mac VNC often sets META on every key; do not
+   * treat META as a shortcut or all typing is swallowed. */
+  if (modkey & KMOD_CTRL)
   {
     ShortCutKey.Key = symkey;
-    if( modkey&(KMOD_LCTRL|KMOD_RCTRL) )  ShortCutKey.bCtrlPressed = TRUE;
-    if( modkey&(KMOD_LSHIFT|KMOD_RSHIFT) )  ShortCutKey.bShiftPressed = TRUE;
+    ShortCutKey.bCtrlPressed = TRUE;
+    if (modkey & (KMOD_LSHIFT|KMOD_RSHIFT)) ShortCutKey.bShiftPressed = TRUE;
   }
   else
   {
