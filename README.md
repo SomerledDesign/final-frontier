@@ -195,6 +195,9 @@ docker run --rm -v "$PWD":/src final-frontier-build \
   sh -c 'make clean && make -C as68k clean; make'
 ```
 
+On a fresh clone the `clean` step prints `Error 1 (ignored)` because there is nothing to
+delete yet. That's harmless.
+
 This builds `as68k`, converts `fe2.s` into `fe2.s.c` and `fe2.s.bin`, compiles the two
 halves, and links `./frontier` in the repo root. Check it with:
 
@@ -221,6 +224,10 @@ docker build -t final-frontier:runtime \
 ```sh
 docker run -d --name frontier -p 5900:5900 -p 6080:6080 final-frontier:runtime
 ```
+
+These steps were run end-to-end from a fresh clone of this branch on an Apple Silicon Mac
+(Docker Desktop, arm64) on 2026-09-26. The build took about 20 seconds, and
+stop/start of the container worked.
 
 Stop and remove it with:
 
